@@ -1,8 +1,8 @@
 const axios = require('axios');
 const mixedOptions = {};
 
-const apiAgify = 'https://agify-service:4000/agify';
-const apiGenderize = 'https://genderize-service:4000/genderize';
+const apiAgify = 'http://agify-service:4000/api/agify';
+const apiGenderize = 'http://genderize-service:4000/api/genderize';
 
 mixedOptions.calculate = (req, res) => {
     const { name } = req.query;

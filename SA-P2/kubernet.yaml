@@ -96,6 +96,6 @@ spec:
     spec:
       containers:
         - name: public-service
-          image: camranjuntinase/sa_p2:mixed
+          image: camranjuntinase/sa_p2:mixedIOv3
           ports:
             - containerPort: 4000
