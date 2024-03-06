@@ -1,0 +1,21 @@
+{
+  "name": "sa-p2",
+  "version": "1.0.0",
+  "description": "Practica 2 de Software Avanzado",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose --runInBand --coverage --detectOpenHandles",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "author": "camran",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0"
+  }
+}
