@@ -1,24 +1,52 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: logstash.k8s.elastic.co/v1alpha1
+kind: Logstash
 metadata:
-  name: logstash
+  name: quickstart-logstash
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: logstash
-  template:
-    metadata:
-      labels:
-        app: logstash
-    spec:
-      containers:
-      - name: logstash
-        image: docker.elastic.co/logstash/logstash:7.15.0
-        volumeMounts:
-        - name: config-volume
-          mountPath: /usr/share/logstash/config
-      volumes:
-      - name: config-volume
-        configMap:
-          name: logstash-config
+  version: 8.13.2
+  count: 1
+  elasticsearchRefs:
+    - name: quickstart
+      clusterName: qs  
+  pipelines:
+    - pipeline.id: main
+      config.string: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+        output {
+          elasticsearch {
+            hosts => [ "${QS_ES_HOSTS}" ]
+            user => "${QS_ES_USER}"
+            password => "${QS_ES_PASSWORD}"
+            ssl_certificate_authorities => "${QS_ES_SSL_CERTIFICATE_AUTHORITY}"
+          }
+        }
+  services:
+    - name: beats
+      service:
+        spec:
+          type: NodePort
+          ports:
+            - port: 5044
+              name: "filebeat"
+              protocol: TCP
+              targetPort: 5044      
+  volumeClaimTemplates:
+    - metadata:
+        name: logstash-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: local-storage
+        resources:
+          requests:
+            storage: 10Gi        
+ # podTemplate:
+  #  spec:
+    #  tolerations:
+    #    - effect: NoSchedule
+    #      key: node-role.kubernetes.io/master
+    #      operator: Exists

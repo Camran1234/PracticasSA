@@ -1,21 +1,28 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
 metadata:
-  name: kibana
+  name: quickstart
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: kibana
-  template:
-    metadata:
-      labels:
-        app: kibana
+  version: 8.13.2
+  count: 1    
+  elasticsearchRef:
+    name: quickstart
+    namespace: default
+  podTemplate:
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana:7.15.0
-        ports:
-        - containerPort: 5601
-          name: http
-          protocol: TCP
+        env:
+          - name: NODE_OPTIONS
+            value: "--max-old-space-size=2048"
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: 0.5
+          limits:
+            memory: 2.5Gi
+            cpu: 2
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
