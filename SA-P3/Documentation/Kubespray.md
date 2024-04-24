@@ -45,6 +45,9 @@ for i in 0 1 2; do
     --tags kubernetes-the-kubespray-way,worker
 done
 
+## Cambiar la configuración de las máquinas
+Cambiar por 4vCPU y 8 de Ram al menos
+
 ## List instances
 gcloud compute instances list --filter="tags.items=kubernetes-the-kubespray-way"
 
